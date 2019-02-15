@@ -78,6 +78,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .home {
+  background-color: white;
   .searchBar {
     display: flex;
     padding: 10px;
@@ -132,7 +133,7 @@ export default {
 
   .content {
     box-sizing: border-box;
-    height: calc(100vh - 53px);
+    height: calc(93vh - 53px);
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
     display: flex;

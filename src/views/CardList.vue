@@ -11,7 +11,12 @@
     </div>
     <div class="cates">
       <router-link
-        :to="{name:'mycard',params:{id:item.cat_id}}"
+        :to="{name:'mycard',params:{
+          id:item.cat_id,
+          name:item.label,
+          is_use:tabList[active].is_use,
+          is_end:tabList[active].is_end
+        }}"
         class="cate_item"
         v-for="item in catList"
         :key="item.cat_id"
@@ -40,15 +45,21 @@ export default {
       tabList: [
         {
           name: '未使用',
-          filed: 'no_use_count'
+          filed: 'no_use_count',
+          is_use: 0,
+          is_end: 0
         },
         {
           name: '已使用',
-          filed: 'used_count'
+          filed: 'used_count',
+          is_use: 1,
+          is_end: 0
         },
         {
           name: '已过期',
-          filed: 'is_end_count'
+          filed: 'is_end_count',
+          is_use: 0,
+          is_end: 1
         }
       ]
     }
@@ -68,8 +79,6 @@ export default {
 
 <style lang="less" scoped>
 .cardlist {
-  height: 100vh;
-  width: 100vw;
   background-color: #f3f3f3;
   .tabs {
     display: flex;

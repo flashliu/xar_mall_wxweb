@@ -24,7 +24,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/CardList.vue')
     },
     {
-      path: '/mycard/:id',
+      path: '/mycard/:name/:id/:is_use/:is_end',
       name: 'mycard',
       component: () => import(/* webpackChunkName: "about" */ './views/Mycard.vue')
     }

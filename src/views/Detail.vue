@@ -1,5 +1,5 @@
 <template>
-  <div class="detail">
+  <div v-if="goods_info" class="detail">
     <div class="scroller">
       <swiper class="swiper">
         <swiper-slide v-for="item in goods_info.pro_img" :key="item.pro_id">
@@ -34,10 +34,10 @@
         </div>
         <div class="content">
           <div style="color:#cfcfcf">购买商品支付</div>
-          <div style="margin:5px 0">¥ 1050</div>
-          <div class="amount">商城账户：¥ 7689</div>
-          <div class="pay_btn">微信支付</div>
-          <div class="pay_btn">余额支付</div>
+          <div style="margin:5px 0">¥ {{goods_info.mall_price}}</div>
+          <div class="amount">商城账户：¥ {{user_money}}</div>
+          <div class="pay_btn" @click="pay('wx_lite')">微信支付</div>
+          <div class="pay_btn" @click="pay('money_bag')">余额支付</div>
         </div>
       </div>
     </div>
@@ -46,11 +46,13 @@
 <script>
 import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import wx from 'weixin-js-sdk';
 export default {
   name: 'detail',
   data() {
     return {
-      goods_info: {},
+      goods_info: null,
+      user_money: 0,
       choosing: false,
       showMain: false
     }
@@ -60,15 +62,66 @@ export default {
       this.axios.post('/api/v2/mallvcard/getvcardgoodsinfo', { id }).then(res => {
         this.goods_info = res.data.data
       })
+      this.axios.post('/api/api/zsalaryrecord/getbillrecord').then(res => {
+        this.user_money = res.data.data.user_money;
+      })
+    },
+    pay(pay_type) {
+      const shop_orders = [
+        {
+          brand_id: this.goods_info.sup_brand_id || 0,
+          goods: [
+            {
+              goods_id: this.goods_info.id,
+              shop_id: 0,
+              rg_id: 0,
+              qrcode: 0,
+              quantity: 1,
+              superior_id: 0,
+              second_id: 0
+            }
+          ]
+        }
+      ]
+
+      this.axios.post('/api/v2/payment/pay', {
+        pay_type,
+        shop_orders,
+        form_id: 0,
+        voucher_id: 0,
+        platform: 'pub',
+      }).then(res => {
+        if (res.data.status) {
+          if (pay_type == 'wx_lite') {
+            wx.chooseWXPay({
+              timestamp: res.data.data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+              nonceStr: res.data.data.nonceStr, // 支付签名随机串，不长于 32 位
+              package: res.data.data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+              signType: res.data.data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+              paySign: res.data.data.paySign, // 支付签名
+              success: () => {
+                this.$router.push('/cardlist')
+              }
+            });
+          } else {
+            this.$router.push('/cardlist')
+          }
+        }
+      })
     }
   },
   watch: {
     '$route.params.id'(id) {
       id && this.fetchData(id)
+      if (id == undefined) {
+        this.goods_info = null
+      }
     },
     choosing(val) {
       this.$nextTick(() => {
-        this.showMain = val
+        setTimeout(() => {
+          this.showMain = val
+        }, 0);
       })
     }
   },
@@ -86,10 +139,10 @@ export default {
 .detail {
   .scroller {
     background-color: #f3f3f3;
-    height: 93vh;
+    height: 86vh;
     overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
     .swiper {
-      height: 240px;
       overflow: hidden;
       img {
         width: 100%;
@@ -151,7 +204,7 @@ export default {
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: 7vh;
     background-color: rgba(0, 0, 0, 0.4);
     display: flex;
     align-items: flex-end;
@@ -160,7 +213,7 @@ export default {
       background-color: white;
       width: 100%;
       text-align: center;
-      transition: all .3s;
+      transition: all 0.3s;
       transform: translateY(100%);
       .name {
         padding: 15px;
