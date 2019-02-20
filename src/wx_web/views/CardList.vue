@@ -21,11 +21,11 @@
         v-for="item in catList"
         :key="item.cat_id"
       >
-        <img v-if="item.cat_id == 39" src="../assets/cardc.png">
-        <img v-if="item.cat_id == 40" src="../assets/cardb.png">
-        <img v-if="item.cat_id == 42" src="../assets/carda.png">
-        <img v-if="item.cat_id == 43" src="../assets/mrk.png">
-        <img v-if="item.cat_id == 0" src="../assets/other.png">
+        <img v-if="item.cat_id == 39" src="@/assets/cardc.png">
+        <img v-if="item.cat_id == 40" src="@/assets/cardb.png">
+        <img v-if="item.cat_id == 42" src="@/assets/carda.png">
+        <img v-if="item.cat_id == 43" src="@/assets/mrk.png">
+        <img v-if="item.cat_id == 0" src="@/assets/other.png">
         <div class="name">
           {{item.label}}
           <span class="count">{{item[tabList[active].filed]}}</span>

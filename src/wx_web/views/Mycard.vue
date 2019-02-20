@@ -51,28 +51,28 @@ export default {
   methods: {
     img_path(item) {
       const cat_imgs = {
-        39: require('../assets/xc.png'),
-        40: require('../assets/by.png'),
-        42: require('../assets/zq.png'),
-        43: require('../assets/mr.png'),
+        39: require('@/assets/xc.png'),
+        40: require('@/assets/by.png'),
+        42: require('@/assets/zq.png'),
+        43: require('@/assets/mr.png'),
       }
       const give_imgs = {
-        39: require('../assets/xch.png'),
-        40: require('../assets/byh.png'),
-        42: require('../assets/zqh.png'),
-        43: require('../assets/mr.png'),
+        39: require('@/assets/xch.png'),
+        40: require('@/assets/byh.png'),
+        42: require('@/assets/zqh.png'),
+        43: require('@/assets/mr.png'),
       }
       if (this.$route.params.is_use || this.$route.params.is_end) {
         if (item.gived_by > 0) {
-          return `url(${require('../assets/nouse.png')})`
+          return `url(${require('@/assets/nouse.png')})`
         } else {
-          return `url(${require('../assets/nouse1.png')})`
+          return `url(${require('@/assets/nouse1.png')})`
         }
       }
       if (item.gived_by > 0) {
-        return `url(${give_imgs[this.$route.params.id] || require('../assets/xch.png')})`
+        return `url(${give_imgs[this.$route.params.id] || require('@/assets/xch.png')})`
       }
-      return `url(${cat_imgs[this.$route.params.id] || require('../assets/xc.png')})`
+      return `url(${cat_imgs[this.$route.params.id] || require('@/assets/xc.png')})`
     },
     showQrcode(list_no) {
       this.axios.post('/api/api/zmallvcard/carduse', {

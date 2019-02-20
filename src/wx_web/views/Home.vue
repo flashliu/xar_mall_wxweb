@@ -116,7 +116,7 @@ export default {
     padding: 0 10px;
     .title {
       padding-left: 24px;
-      background-image: url("../assets/hot.png");
+      background-image: url("../../assets/hot.png");
       background-repeat: no-repeat;
       background-position: left center;
       background-size: 16px;

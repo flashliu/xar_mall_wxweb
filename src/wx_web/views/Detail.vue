@@ -30,7 +30,7 @@
       <div class="main" :class="{animate:showMain}">
         <div class="name">
           支付选择
-          <img @click="choosing = false" src="../assets/close.png">
+          <img @click="choosing = false" src="@/assets/close.png">
         </div>
         <div class="content">
           <div style="color:#cfcfcf">购买商品支付</div>
