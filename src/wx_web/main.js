@@ -26,7 +26,7 @@ function getUnionid() {
           resolve(res.data.data.unionid)
         })
       } else {
-        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx630c6b5030ce918b&redirect_uri=https://wx.ynxar.com&response_type=code&scope=snsapi_userinfo#wechat_redirect'
+        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx630c6b5030ce918b&redirect_uri=https://wx.ynxar.com/xar_mall_wx&response_type=code&scope=snsapi_userinfo#wechat_redirect'
       }
     }
   })

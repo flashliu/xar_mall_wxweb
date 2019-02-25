@@ -6,7 +6,7 @@
         <i class="cubeic-arrow"></i>
       </router-link>
     </div>
-    <CarInfo :model="model"></CarInfo>
+    <CarInfo :user='true' :model="model"></CarInfo>
     <cube-button class="submit" @click="submit">提交</cube-button>
   </div>
 </template>

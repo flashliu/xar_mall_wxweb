@@ -3,10 +3,31 @@
     <div class="cube-item border-bottom-1px">
       <router-link to="/carbrand">
         <span class="label">车型</span>
-        <span class="value" v-if="model.brand_names">{{model.brand_names}}</span>
-        <span v-else class="placeholder">请选择车型</span>
+        <span class="value" style="float:right;margin-right:30px;">选择车型</span>
         <i class="cubeic-arrow"></i>
       </router-link>
+    </div>
+    <div class="type_detail" v-if="typeInfo.length>0">
+      <div class="item border-bottom-1px">
+        <span class="label">品牌：</span>
+        <span class="value">{{typeInfo[0]}}</span>
+      </div>
+      <div class="item border-bottom-1px">
+        <span class="label">车系：</span>
+        <span class="value">{{typeInfo[1]}}</span>
+      </div>
+      <div class="item border-bottom-1px">
+        <span class="label">排量：</span>
+        <span class="value">{{typeInfo[2]}}</span>
+      </div>
+      <div class="item border-bottom-1px">
+        <span class="label">年份：</span>
+        <span class="value">{{typeInfo[3]}}</span>
+      </div>
+      <div class="item border-bottom-1px">
+        <span class="label">车型：</span>
+        <span class="value">{{typeInfo[4]}}</span>
+      </div>
     </div>
     <cube-form :model="model" class="form-custom">
       <cube-form-item :field="schema.fields[0]"></cube-form-item>
@@ -25,7 +46,7 @@
         >{{model.address_text || schema.fields[3].props.placeholder}}</cube-button>
         <i class="cubeic-arrow"></i>
       </cube-form-item>
-      <cube-form-item :field="schema.fields[4]"></cube-form-item>
+      <cube-form-item v-if="user" :field="schema.fields[4]"></cube-form-item>
       <cube-form-item :field="schema.fields[5]"></cube-form-item>
     </cube-form>
   </div>
@@ -34,7 +55,15 @@
 import events from '../events'
 export default {
   name: 'carInfo',
-  props: ['model'],
+  props: ['model','user'],
+  computed: {
+    typeInfo() {
+      if (this.model && this.model.brand_names) {
+        return this.model.brand_names.split(',')
+      }
+      return []
+    }
+  },
   data() {
     return {
       cityData: [],
@@ -136,4 +165,18 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.type_detail {
+  background-color: white;
+  color: #888;
+  font-size: 14px;
+  line-height: 30px;
+  .item {
+    padding: 0 15px;
+  }
+}
+</style>
+
+
 

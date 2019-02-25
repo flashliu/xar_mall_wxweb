@@ -21,6 +21,7 @@ axios.interceptors.request.use(async config => {
     }
     loading.show()
     const unionid = await getUnionid()
+    // const unionid = 'oeI0t1nMyDWIh8Hvhyb_R55LLDCg'
     const data = {
         ...config.data,
         unionid

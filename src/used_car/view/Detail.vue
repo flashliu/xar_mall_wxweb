@@ -21,10 +21,10 @@
         <div class="label">所在城市</div>
         <div class="name">{{model.address_text}}</div>
       </div>
-      <div class="item">
+      <!-- <div class="item">
         <div class="label">联系电话</div>
         <div class="name">{{model.customer_phone}}</div>
-      </div>
+      </div> -->
       <div class="item">
         <div class="label">车主</div>
         <div class="name">{{model.vehicle_owner}}</div>
@@ -64,7 +64,7 @@
           </div>
         </div>
       </div>
-      <div class="item" v-if="model.img_other.length>0">
+      <div class="item" v-if="model.img_other && model.img_other.length>0">
         <div class="label">异常项</div>
         <div class="imgs">
           <div class="img" v-for="item in model.img_other" :key="item">

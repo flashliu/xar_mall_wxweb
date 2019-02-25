@@ -65,7 +65,7 @@
       <div style="height:10px"></div>
     </cube-scroll>
     <div class="actions">
-      <cube-button primary @click="showActive">结束评估</cube-button>
+      <cube-button primary @click="showActive" :disabled="disabled">结束评估</cube-button>
       <div style="width:20px;"></div>
       <cube-button @click="save">保存信息</cube-button>
     </div>
@@ -78,6 +78,7 @@ export default {
   data() {
     return {
       model: {},
+      disabled: false
     }
   },
   components: { CarInfo },
@@ -92,6 +93,14 @@ export default {
         data.img_other = data.img_other.map(url => ({ url }))
         data.description = data.description || ''
         this.model = data
+        this.$watch('model', () => {
+          if (!this.disabled) {
+            this.disabled = true
+          }
+        }, { deep: true })
+        this.$nextTick().then(() => {
+          this.disabled = false
+        })
       })
     },
     showActive() {
@@ -99,19 +108,30 @@ export default {
         active: 0,
         data: [
           {
-            content: '通过评估'
+            content: '售卖'
           },
           {
-            content: '评估失败'
+            content: '不售卖'
           }
         ],
         onSelect: (item, index) => {
           this.showPrompt(index)
+          this.$nextTick().then(() => {
+            this.bindInputEvents()
+          })
         },
       }).show()
     },
+    bindInputEvents() {
+      const inputs = document.querySelectorAll('input')
+      inputs.forEach(item => {
+        item.addEventListener('blur', () => {
+          window.scroll(0, 0);
+        })
+      })
+    },
     showPrompt(passed) {
-      this.$createDialog({
+      this.dialog = this.$createDialog({
         type: 'prompt',
         title: passed ? '失败原因' : '售卖价格',
         prompt: {
@@ -119,13 +139,18 @@ export default {
           placeholder: passed ? '请填写失败原因' : '请填写售卖价格'
         },
         onConfirm: (e, promptValue) => {
+          this.dialog.remove()
           if (passed) {
             this.pass(promptValue)
           } else {
             this.adopt(promptValue)
           }
+        },
+        onCancel: () => {
+          this.dialog.remove()
         }
-      }).show()
+      })
+      this.dialog.show()
     },
     pass(status_remark) {
       this.$axios.post('/api/usedcar/employeeassess/disagree', {
@@ -154,6 +179,7 @@ export default {
       })
     },
     uploadSuccess(file) {
+      this.disabled = true
       file.url = file.response.data.full_path
     },
     filesAdded(files) {
@@ -168,6 +194,7 @@ export default {
       data.img_other = data.img_other.map(item => item.url)
       this.$axios.post('/api/usedcar/employeeassess/save', data).then(res => {
         this.$message(res.data.message, res.data.status)
+        this.disabled = false
       })
     }
   },
@@ -181,6 +208,9 @@ export default {
     if (!this.$route.meta.isBack) {
       this.getInfo()
     }
+  },
+  mounted() {
+    this.bindInputEvents()
   }
 }
 </script>
@@ -193,6 +223,10 @@ export default {
   margin-top: 10px;
   padding: 10px;
   color: #666;
+  .tips{
+    color: #F56C6C;
+    font-size: 14px;
+  }
   .title {
     margin: 10px 0;
   }

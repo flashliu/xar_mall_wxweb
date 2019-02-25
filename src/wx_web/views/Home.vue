@@ -66,7 +66,7 @@ export default {
   methods: {
     search(keyword) {
       keyword != this.searchVal && (this.searchVal = keyword)
-      this.axios.post('api/v2/Mallindex/getAll', {
+      this.axios.post('/api/v2/Mallindex/getAll', {
         keyword
       }).then(res => {
         this.goods_list = res.data.data.list.filter(item=>item.type=='card')

@@ -1,26 +1,35 @@
 <template>
   <div class="orderitem">
-    <div class="main">
-      <div class="img">
-        <img :src="item.logo">
+    <router-link :to="to">
+      <div class="main">
+        <div class="img">
+          <img :src="item.logo">
+        </div>
+        <div class="info">
+          <p>
+            <span class="chip">{{item.color}}</span>
+            {{item.brand_name && item.brand_name.brand}}
+          </p>
+          <p>{{item.sale}}</p>
+          <p>上牌时间：{{item.licensing_time}}</p>
+          <p>里程数：{{item.mileage}}km</p>
+          <p>
+            车主：{{item.vehicle_owner}}
+            <span
+              class="chip"
+              style="margin-left:10px;"
+            >已申请{{item.assess_num}}次</span>
+          </p>
+        </div>
+        <div class="status">
+          <div class="primary">{{statusObj(item.status).title}}</div>
+          <div class="secondary">{{statusObj(item.status).message}}</div>
+        </div>
       </div>
-      <div class="info">
-        <p>
-          <span class="chip">{{item.color}}</span>
-          {{item.brand_name && item.brand_name.brand}}
-        </p>
-        <p>{{item.sale}}</p>
-        <p>上牌时间：{{item.licensing_time}}</p>
-        <p>里程数：{{item.mileage}}km</p>
-      </div>
-      <div class="status">
-        <div class="primary">{{statusObj(item.status).title}}</div>
-        <div class="secondary">{{statusObj(item.status).message}}</div>
-      </div>
-    </div>
+    </router-link>
     <div v-if="showAction && (item.status == 0 || item.status == 1)" class="action border-top-1px">
       <div class="a_item" @click.stop="accept(item)" v-if="item.status == 0">接单</div>
-      <a @click.stop='stop' :href="'tel:' + item.customer_phone" class="a_item" v-if="item.status == 1">电话沟通</a>
+      <a :href="'tel:' + item.customer_phone" class="a_item" v-if="item.status == 1">电话沟通</a>
       <router-link
         :to="{name:'assessinfo',params:{id:item.assess_id}}"
         class="a_item"
@@ -35,30 +44,30 @@ export default {
   name: 'OrderItem',
   props: {
     item: Object,
-    showAction: Boolean
+    showAction: Boolean,
+    to: [Object, String]
   },
   methods: {
     statusObj(status) {
       if (status == 0 || status == 1) {
         return {
-          title: '申请中',
-          message: '等待工作人员联系'
+          title: this.$route.params.isEmployee == 0 ? '申请中' : '',
+          message: this.$route.params.isEmployee == 0 ? '等待联系' : status == 0 ? '等待接单' : '等待评估'
         }
       }
       if (status == 3) {
         return {
-          title: '申请失败',
-          message: '双方未达成一致'
+          title: this.$route.params.isEmployee == 0 ? '申请失败' : '',
+          message: '不售卖'
         }
       }
       if (status == 4) {
         return {
-          title: '申请成功',
-          message: '双方达成一致'
+          title: this.$route.params.isEmployee == 0 ? '申请成功' : '',
+          message: '售卖'
         }
       }
     },
-    stop(){},
     accept(item) {
       if (this.accepting) {
         return
@@ -111,6 +120,7 @@ export default {
     }
     .status {
       justify-self: flex-end;
+      text-align: right;
       .error {
         color: #f56c6c;
       }

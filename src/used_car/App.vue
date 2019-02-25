@@ -25,6 +25,7 @@
     text-decoration: none;
     color: inherit;
     font-size: inherit;
+    display: block;
   }
   .relative {
     position: relative;

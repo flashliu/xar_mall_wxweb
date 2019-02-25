@@ -2,9 +2,12 @@
   <div class="orderhistory">
     <div v-for="item in list" :key="item.assess_id" class="item">
       <div class="time">2018-2-12</div>
-      <router-link :to="{name:'detail',params:{id:item.assess_id}}">
-        <OrderItem :show-action="$route.params.isEmployee==1" @accept="accept" :item="item"></OrderItem>
-      </router-link>
+      <OrderItem
+        :to="{name:'detail',params:{id:item.assess_id}}"
+        :show-action="$route.params.isEmployee==1"
+        @accept="accept"
+        :item="item"
+      ></OrderItem>
     </div>
   </div>
 </template>
@@ -20,8 +23,7 @@ export default {
   },
   methods: {
     getList() {
-      console.log(this.$route.params)
-      if (this.$route.params.isEmployee==1) {
+      if (this.$route.params.isEmployee == 1) {
         this.$axios.post('/api/usedcar/employeeassess/customerhistory', {
           page: 0,
           customer_id: this.$route.params.customer_id

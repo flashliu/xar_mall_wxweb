@@ -21,9 +21,12 @@
         <cube-scroll style="height:calc(100vh - 38px)" :options="scrollOptions">
           <ul class="list-wrapper">
             <li v-for="(item, index) in value.list" :key="index">
-              <router-link :to="{name:'detail',params:{id:item.assess_id}}">
-                <OrderItem @accept="accept" show-action :item="item"></OrderItem>
-              </router-link>
+              <OrderItem
+                :to="{name:'detail',params:{id:item.assess_id}}"
+                @accept="accept"
+                show-action
+                :item="item"
+              ></OrderItem>
             </li>
           </ul>
         </cube-scroll>
@@ -93,13 +96,8 @@ export default {
   },
   created() {
     this.setData()
+    this.$route.params.isEmployee = 1
   },
-  // beforeRouteLeave(to, from, next) {
-  //   if (to.name == 'assessinfo') {
-  //     to.meta.keepAlive = false
-  //   }
-  //   next()
-  // }
 }
 </script>
 <style lang="less" scoped>
