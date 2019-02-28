@@ -180,10 +180,12 @@ export default {
     },
     uploadSuccess(file) {
       this.disabled = true
-      file.url = file.response.data.full_path
-    },
-    filesAdded(files) {
-      alert(JSON.stringify(files))
+      if (file.response.error) {
+        file.status = 'error'
+        alert(file.response.message)
+      } else {
+        file.url = file.response.data && file.response.data.full_path
+      }
     },
     save() {
       const data = Object.assign({}, this.model)
@@ -223,8 +225,8 @@ export default {
   margin-top: 10px;
   padding: 10px;
   color: #666;
-  .tips{
-    color: #F56C6C;
+  .tips {
+    color: #f56c6c;
     font-size: 14px;
   }
   .title {
