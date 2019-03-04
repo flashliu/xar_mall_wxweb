@@ -17,6 +17,7 @@
             @file-success="uploadSuccess"
             v-model="model.img_exterior"
             :action="{target:'/api/api/upload/upload'}"
+            :process-file="processFile"
           ></cube-upload>
         </div>
         <div class="item">
@@ -25,6 +26,7 @@
             @file-success="uploadSuccess"
             v-model="model.img_interiors"
             :action="{target:'/api/api/upload/upload'}"
+            :process-file="processFile"
           ></cube-upload>
         </div>
         <div class="item">
@@ -33,6 +35,7 @@
             @file-success="uploadSuccess"
             v-model="model.img_engineroom"
             :action="{target:'/api/api/upload/upload'}"
+            :process-file="processFile"
           ></cube-upload>
         </div>
         <div class="item">
@@ -41,6 +44,7 @@
             @file-success="uploadSuccess"
             v-model="model.img_trunk"
             :action="{target:'/api/api/upload/upload'}"
+            :process-file="processFile"
           ></cube-upload>
         </div>
         <div class="item">
@@ -49,6 +53,7 @@
             @file-success="uploadSuccess"
             v-model="model.img_other"
             :action="{target:'/api/api/upload/upload'}"
+            :process-file="processFile"
           ></cube-upload>
         </div>
       </div>
@@ -73,6 +78,7 @@
 </template>
 <script>
 import CarInfo from '../components/CarInfo'
+import compress from '../image'
 export default {
   name: 'assessinfo',
   data() {
@@ -198,7 +204,17 @@ export default {
         this.$message(res.data.message, res.data.status)
         this.disabled = false
       })
-    }
+    },
+    processFile(file, next) {
+      compress(file, {
+        compress: {
+          width: 600,
+          height: 600,
+          quality: 1,
+        },
+        type: 'file'
+      }, next)
+    },
   },
   beforeRouteEnter(to, from, next) {
     if (from.name == 'carbrand') {
@@ -215,6 +231,7 @@ export default {
     this.bindInputEvents()
   }
 }
+
 </script>
 <style lang="less" scoped>
 .assessinfo {

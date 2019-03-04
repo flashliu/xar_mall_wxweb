@@ -7,7 +7,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'https://api.ynxar.com/', //测试服务器
+        target: 'https://recp.ynxar.com/', //测试服务器
         pathRewrite: {
           '^/api': ''
         } //刘杰服务器
