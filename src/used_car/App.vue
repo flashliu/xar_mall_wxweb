@@ -76,6 +76,12 @@
       display: block;
     }
   }
+  .cube-drawer-panels{
+    width: 350px;
+  }
+  .cube-drawer-panel + .cube-drawer-panel{
+    margin-left: -200px;
+  }
 }
 </style>
 
